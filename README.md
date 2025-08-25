@@ -1,12 +1,22 @@
-# Predictive Maintenance for Spacecraft Systems  
-This project uses machine learning to predict spacecraft failures based on sensor data.  
+# 🚀 Predictive Maintenance for Spacecraft Systems  
 
-## Features  
-- Uses Random Forest Classifier for failure prediction  
-- Dataset includes temperature, pressure, vibration, radiation, and power output readings  
-- Generates confusion matrix and accuracy report  
+This project applies **machine learning** to predict potential spacecraft subsystem failures using sensor data. The goal is to enable proactive maintenance, reduce mission risks, and extend spacecraft operational lifetimes.  
 
-## Files  
-- **spacecraft_sensor_data.csv** → Dataset  
-- **model_evaluation.txt** → Model performance report
-- Bored translates model performers to python 
+---
+
+## ✨ Features
+- Uses a **Random Forest Classifier** to predict failures.  
+- Dataset includes critical sensor readings:  
+  - Temperature  
+  - Pressure  
+  - Vibration  
+  - Radiation  
+  - Power Output  
+- Generates performance reports:  
+  - **Confusion Matrix**  
+  - **Classification Report (Precision, Recall, F1-score)**  
+- Easy to extend with other ML models (SVM, Gradient Boosting, Neural Networks).  
+
+---
+
+## 📂 Project Structure
