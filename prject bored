@@ -1,0 +1,65 @@
+# --- Explain a classification report like the one you posted ---
+# Recreates the exact metrics, prints an annotated breakdown,
+# and visualizes the confusion matrix.import numpy as np
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    precision_recall_fscore_support,
+    balanced_accuracy_score
+)
+import matplotlib.pyplot as plt# 1) Recreate your scenario
+# - 200 samples total
+# - True labels: 158 negatives (0), 42 positives (1)
+# - Model predicts everything as class 0  -> matches your report exactly
+y_true = np.array([0]*158 + [1]*42)
+y_pred = np.array([0]*200)print("=== Classification report (reproduced) ===")
+print(classification_report(y_true, y_pred, digits=2, zero_division=0))# 2) Confusion matrix + derived rates
+cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
+tn, fp, fn, tp = cm.ravel()  # [[TN, FP], [FN, TP]]print("\n=== Confusion Matrix ===")
+print(f"[[TN, FP], [FN, TP]] = [[{tn}, {fp}], [{fn}, {tp}]]")# Derived rates
+tpr = tp / (tp + fn) if (tp + fn) else 0.0  # Recall (Sensitivity) of class 1
+tnr = tn / (tn + fp) if (tn + fp) else 0.0  # Specificity of class 0
+fpr = fp / (fp + tn) if (fp + tn) else 0.0
+fnr = fn / (fn + tp) if (fn + tp) else 0.0print("\n=== Derived Rates ===")
+print(f"Class 1 Recall (TPR/Sensitivity): {tpr:.2f}")
+print(f"Class 0 Specificity (TNR):        {tnr:.2f}")
+print(f"False Positive Rate (FPR):        {fpr:.2f}")
+print(f"False Negative Rate (FNR):        {fnr:.2f}")# 3) Accuracy, macro/weighted averages, and why accuracy is misleading here
+acc = (tp + tn) / len(y_true)
+prec, rec, f1, support = precision_recall_fscore_support(
+    y_true, y_pred, labels=[0, 1], zero_division=0
+)
+bal_acc = balanced_accuracy_score(y_true, y_pred)print("\n=== Summary ===")
+print(f"Overall Accuracy: {acc:.2f}  (same as predicting the majority class only: {158/200:.2f})")
+print(f"Balanced Accuracy (avg of recalls): {bal_acc:.2f}")
+print(f"Per-class precision: {prec}  (for classes [0, 1])")
+print(f"Per-class recall:    {rec}   (for classes [0, 1])")
+print(f"Per-class F1:        {f1}    (for classes [0, 1])")
+print(f"Support:             {support}")print(
+    "\nWhy accuracy=0.79 despite class 1 failing:\n"
+    "- The dataset is imbalanced (158 negatives vs 42 positives).\n"
+    "- Predicting everything as class 0 gets 158/200 correct = 0.79 accuracy.\n"
+    "- But class 1 has TP=0, hence precision/recall/F1 for class 1 are all 0.00.\n"
+    "- Macro metrics drop because they treat both classes equally.\n"
+    "- Balanced accuracy also reveals the issue by averaging recalls across classes."
+)# 4) Visualize the confusion matrix (matplotlib, no seaborn)
+plt.figure()
+plt.imshow(cm, interpolation='nearest')
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted label')
+plt.ylabel('True label')
+plt.xticks([0,1],[0,1])
+plt.yticks([0,1],[0,1])# Annotate counts
+for (i, j), v in np.ndenumerate(cm):
+    plt.text(j, i, str(v), ha='center', va='center')plt.colorbar()
+plt.tight_layout()
+plt.show()# 5) (Optional) Quick tip: which metrics to track next time
+print(
+    "\nTips:\n"
+    "- Track per-class recall, balanced accuracy, and macro F1 (not just accuracy).\n"
+    "- Use class_weight='balanced' or resampling to handle imbalance.\n"
+    "- If you have probabilities, adjust the decision threshold to improve class 1 recall."
+)
+
+
+Jot something down
