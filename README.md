@@ -8,4 +8,5 @@ This project uses machine learning to predict spacecraft failures based on senso
 
 ## Files  
 - **spacecraft_sensor_data.csv** → Dataset  
-- **model_evaluation.txt** → Model performance report  
+- **model_evaluation.txt** → Model performance report
+- Bored translates model performers to python 
